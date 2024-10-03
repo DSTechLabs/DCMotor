@@ -1,0 +1,6 @@
+{
+    "port": "COM11",
+    "configuration": "cpu=atmega328old",
+    "board": "arduino:avr:nano",
+    "sketch": "DCMotor.ino"
+}
