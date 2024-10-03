@@ -1,12 +1,11 @@
 //=============================================================================
 //
-//       FILE : DCMotor.ino
+//     FILE : DCMotor.ino
 //
-//    PROJECT : Any project needing to run un-encoded DC motors
+//  PROJECT : Driving DC Motors with PWM
 //
-//     AUTHOR : Bill Daniels
-//              Copyright 2024, D+S Tech Labs, Inc.
-//              All Rights Reserved
+//   AUTHOR : Bill Daniels (bill@dstechlabs.com)
+//            See LICENSE.md
 //
 //=============================================================================
 
