@@ -185,13 +185,16 @@ void DCMotor::Go (Direction dir, int speed)
 
 void DCMotor::Stop ()
 {
-  // Begin ramping down to stop:
-  targetPWM    = 0;
-  pwmIncrement = -1;  // ramping down
+  if (state != STOPPED && currentPWM != 0)
+  {
+    // Begin ramping down to stop:
+    targetPWM    = 0;
+    pwmIncrement = -1;  // ramping down
 
-  // Begin motion
-  nextPWMMicros = micros ();
-  state = RAMPING_DOWN;
+    // Begin motion
+    nextPWMMicros = micros ();
+    state = RAMPING_DOWN;
+  }
 }
 
 //--- EStop -----------------------------------------------
