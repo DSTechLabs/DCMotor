@@ -75,6 +75,11 @@ RunReturn DCMotor::Run ()
         // Adjust speed
         currentPWM += pwmIncrement;  // +1 for ramping up, -1 for ramping down
 
+        if (currentDirection == CW)
+          analogWrite (pwmPin2, currentPWM);
+        else
+          analogWrite (pwmPin1, currentPWM);
+
         // Has the motor reached target speed?
         if (currentPWM == targetPWM)
         {
@@ -83,14 +88,9 @@ RunReturn DCMotor::Run ()
           else
             state = AT_SPEED;
         }
-
-        // Still ramping, set new speed
-        else if (currentDirection == CW)
-          analogWrite (pwmPin2, currentPWM);
         else
-          analogWrite (pwmPin1, currentPWM);
-
-        nextPWMMicros = now + rampPeriod;
+          // Still ramping, set new speed
+          nextPWMMicros = now + rampPeriod;
       }
     }
   }
@@ -158,24 +158,27 @@ void DCMotor::Go (Direction dir, int speed)
     }
   }
 
-  // Begin ramping up to speed from STOPPED:
-  // Speed is specified as a percentage (0-100) of max pulse width value of 250
-  // 50% speed would be a pulse width of 125
+  if (speed != 0)
+  {
+    // Begin ramping up to speed from STOPPED:
+    // Speed is specified as a percentage (0-100) of max pulse width value of 250
+    // 50% speed would be a pulse width of 125
 
-  // Set direction
-  currentDirection = dir;
-  if (currentDirection == CW)
-    digitalWrite (pwmPin1, LOW);  // pwmPin2 will be the PWM pin
-  else
-    digitalWrite (pwmPin2, LOW);  // pwmPin1 will be the PWM pin
+    // Set direction
+    currentDirection = dir;
+    if (currentDirection == CW)
+      digitalWrite (pwmPin1, LOW);  // pwmPin2 will be the PWM pin
+    else
+      digitalWrite (pwmPin2, LOW);  // pwmPin1 will be the PWM pin
 
-  currentPWM   = 0;                  // starting from stopped
-  targetPWM    = speed * 250 / 100;  // pwm is % of 250
-  pwmIncrement = 1;                  // ramping up
+    currentPWM   = 0;                  // starting from stopped
+    targetPWM    = speed * 250 / 100;  // pwm is % of 250
+    pwmIncrement = 1;                  // ramping up
 
-  // Begin motion
-  nextPWMMicros = micros ();
-  state = RAMPING_UP;
+    // Begin motion
+    nextPWMMicros = micros ();
+    state = RAMPING_UP;
+  }
 }
 
 //--- Stop ------------------------------------------------
